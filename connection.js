@@ -3,10 +3,9 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-async function main() {
-    const connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.a4c6owf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+async function main() { 
 
-    const client = new MongoClient(connectionString);
+    const client = new MongoClient(process.env.CONNECTIONSTRING);
 
     try {
         await client.connect();
