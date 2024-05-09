@@ -3,7 +3,7 @@ const Contact = db.contacts;
 
 
 
-exports.create = (req, res) => {
+const createContact = (req, res) => {
   // Validate request
   if (!req.body.name || !req.body.contact_id || !req.body.firstName || !req.body.lastName || !req.body.email || !req.body.favoriteColor || !req.body.birthday) {
     res.status(400).send({ message: 'All fields are required!' });
@@ -32,7 +32,7 @@ exports.create = (req, res) => {
     });
 };
 
-exports.findAll = (req, res) => {
+const getContacts = (req, res) => {
   Contact.find(
     {},
     {
@@ -58,7 +58,7 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single Contact with an id
-exports.findOne = (req, res) => {
+const getContact = (req, res) => {
   const contact_id = req.params.contact_id;
 
   Contact.find({ contact_id: contact_id })
@@ -78,7 +78,7 @@ exports.findOne = (req, res) => {
 };
 
 // Update a Contact by the id in the request
-exports.update = (req, res) => {
+const updateContact = (req, res) => {
   const contact_id = req.params.contact_id;
 
   Contact.findOneAndUpdate({ contact_id: contact_id }, req.body, {
@@ -100,7 +100,7 @@ exports.update = (req, res) => {
 
 
 // Delete a Contact with the specified id in the request
-exports.delete = (req, res) => {
+const deleteContact = (req, res) => {
   const id = req.params.id;
 
   Contact.findByIdAndRemove(id)
@@ -123,7 +123,7 @@ exports.delete = (req, res) => {
 };
 
 // Delete all contacts from the database.
-exports.deleteAll = (req, res) => {
+const deleteContacts = (req, res) => {
   Contact.deleteMany({})
     .then((data) => {
       res.send({
@@ -138,6 +138,13 @@ exports.deleteAll = (req, res) => {
     });
 };
 
-
+module.exports = {
+  createContact,
+  getContacts,
+  getContact,
+  updateContact,
+  deleteContacts,
+  deleteContact
+}
 
 
