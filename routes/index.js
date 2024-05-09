@@ -1,9 +1,15 @@
 const routes = require('express').Router();
-const lesson1Controller = require('../controllers/lesson1');
+const contact = require('./contact');
 
-routes.get('/', lesson1Controller.homeRoute);
-routes.get('/profile', lesson1Controller.profileRoute);
-routes.get('/contacts',require('./contacts'));
+routes.use('/contacts', contact);
+routes.use(
+  '/',
+  (docData = (req, res) => {
+    let docData = {
+      documentationURL: 'https://github.com',
+    };
+    res.send(docData);
+  })
+);
 
-module.exports = routes
- 
+module.exports = routes;
