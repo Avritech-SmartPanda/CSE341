@@ -3,7 +3,7 @@ GET http://localhost:8080/contacts
 
 
 ###  get contact by id
-GET http://localhost:8080/contacts/1
+GET http://localhost:8080/contacts/663d23cfca49f2acd0218b85
 
 
 ### create contact
@@ -32,4 +32,4 @@ Content-Type: application/json
 
 
 ### delete contact
-DELETE http://localhost:8080/contacts/1
+DELETE http://localhost:8080/contacts/663d23cfca49f2acd0218b85
