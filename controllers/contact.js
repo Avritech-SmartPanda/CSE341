@@ -5,7 +5,7 @@ const Contact = db.contacts;
 
 const createContact = (req, res) => {
   // Validate request
-  if (!req.body.name || !req.body.contact_id || !req.body.firstName || !req.body.lastName || !req.body.email || !req.body.favoriteColor || !req.body.birthday) {
+  if (!req.body.contact_id || !req.body.firstName || !req.body.lastName || !req.body.email || !req.body.favoriteColor || !req.body.birthday) {
     res.status(400).send({ message: 'All fields are required!' });
     return;
   }
