@@ -1,8 +1,7 @@
 const db = require('../models');
 const Contact = db.contacts;
 
-const apiKey =
-  'Ezl0961tEpx2UxTZ5v2uKFK91qdNAr5npRlMT1zLcE3Mg68Xwaj3N8Dyp1R8IvFenrVwHRllOUxF0Og00l0m9NcaYMtH6Bpgdv7N';
+
 
 exports.create = (req, res) => {
   // Validate request
@@ -34,53 +33,48 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  if (req.header('apiKey') === apiKey) {
-    Contact.find(
-      {},
-      {
-        contact_id: 1,
-        firstName: 1,
-        lastName: 1,
-        email: 1,
-        favoriteColor: 1,
-        birthday: 1,
-        _id: 0,
-      }
-    )
-      .then((data) => {
-        res.send(data);
-      })
-      .catch((err) => {
-        res.status(500).send({
-          message:
-            err.message || 'Some error occurred while retrieving contacts.',
-        });
+  Contact.find(
+    {},
+    {
+      contact_id: 1,
+      firstName: 1,
+      lastName: 1,
+      email: 1,
+      favoriteColor: 1,
+      birthday: 1,
+      _id: 0,
+    }
+  )
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || 'Some error occurred while retrieving contacts.',
       });
-  } else {
-    res.send('Invalid apiKey, please read the documentation.');
-  }
+    });
+
 };
 
 // Find a single Contact with an id
 exports.findOne = (req, res) => {
   const contact_id = req.params.contact_id;
-  if (req.header('apiKey') === apiKey) {
-    Contact.find({ contact_id: contact_id })
-      .then((data) => {
-        if (!data)
-          res
-            .status(404)
-            .send({ message: 'Not found Contact with contact_id ' + contact_id });
-        else res.send(data[0]);
-      })
-      .catch((err) => {
-        res.status(500).send({
-          message: 'Error retrieving Contact with contact_id=' + contact_id,
-        });
+
+  Contact.find({ contact_id: contact_id })
+    .then((data) => {
+      if (!data)
+        res
+          .status(404)
+          .send({ message: 'Not found Contact with contact_id ' + contact_id });
+      else res.send(data[0]);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: 'Error retrieving Contact with contact_id=' + contact_id,
       });
-  } else {
-    res.send('Invalid apiKey, please read the documentation.');
-  }
+    });
+
 };
 
 // Update a Contact by the id in the request
@@ -103,7 +97,7 @@ exports.update = (req, res) => {
       });
     });
 };
- 
+
 
 // Delete a Contact with the specified id in the request
 exports.delete = (req, res) => {
@@ -144,6 +138,6 @@ exports.deleteAll = (req, res) => {
     });
 };
 
- 
 
- 
+
+

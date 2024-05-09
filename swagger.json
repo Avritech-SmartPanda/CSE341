@@ -14,13 +14,6 @@
     "/contacts/": {
       "get": {
         "description": "",
-        "parameters": [
-          {
-            "name": "apiKey",
-            "in": "header",
-            "type": "string"
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -96,11 +89,6 @@
             "name": "contact_id",
             "in": "path",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "apiKey",
-            "in": "header",
             "type": "string"
           }
         ],
