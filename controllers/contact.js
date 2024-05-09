@@ -56,23 +56,15 @@ const getContacts = (req, res) => {
 };
 
 // Find a single Contact with an id
-const getContact = (req, res) => {
-  const contact_id = req.params.id;
+const getContact = async (req, res) => {
+  const contact_id = new ObjectId(req.params.id);
 
-  Contact.find({ contact_id: contact_id })
-    .then((data) => {
-      if (!data)
-        res
-          .status(404)
-          .send({ message: 'Not found Contact with contact_id ' + contact_id });
-      else res.send(data[0]);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: 'Error retrieving Contact with contact_id=' + contact_id,
-      });
-    });
-
+  const contact = await Contact.findOne({ _id: contact_id })
+  if (contact) {
+    res.status(200).send(contact);
+  } else {
+    res.status(404).send({ message: 'Contact not found' });
+  }
 };
 
 // Update trhe whole  contact by the id in the request
@@ -86,7 +78,6 @@ const updateContact = async (req, res) => {
     birthday: req.body.birthday
   };
 
-
   const response = await Contact.replaceOne({ id: contact_id }, contact);
   if (response.modifiedCount > 0) {
     res.status(200).send(response);
@@ -99,7 +90,6 @@ const updateContact = async (req, res) => {
 // Delete a Contact with the specified id in the request
 const deleteContact = (req, res) => {
   const id = new ObjectId(req.params.id);
-
   Contact.findByIdAndRemove(id)
     .then((data) => {
       if (!data) {
