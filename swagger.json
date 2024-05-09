@@ -32,9 +32,6 @@
             "schema": {
               "type": "object",
               "properties": {
-                "contact_id": {
-                  "example": "any"
-                },
                 "firstName": {
                   "example": "any"
                 },
@@ -65,25 +62,14 @@
             "description": "Internal Server Error"
           }
         }
-      },
-      "delete": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
       }
     },
-    "/contacts/{contact_id}": {
+    "/contacts/{id}": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "contact_id",
+            "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -105,18 +91,39 @@
         "description": "",
         "parameters": [
           {
-            "name": "contact_id",
+            "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "firstName": {
+                  "example": "any"
+                },
+                "lastName": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "favoriteColor": {
+                  "example": "any"
+                },
+                "birthday": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -127,7 +134,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "contact_id",
+            "name": "id",
             "in": "path",
             "required": true,
             "type": "string"

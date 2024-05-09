@@ -1,11 +1,14 @@
 const routes = require('express').Router();
 const contacts = require('./../controllers/contact');
+const app = require('express')();
+const bodyParser = require('body-parser');
 
 
 routes.get('/', contacts.getContacts);
 routes.post('/', contacts.createContact);
-routes.get('/:contact_id', contacts.getContact);
-routes.put('/:contact_id', contacts.updateContact);
-routes.delete('/:contact_id', contacts.deleteContact);
-routes.delete('/', contacts.deleteContacts);
+routes.get('/:id', contacts.getContact);
+routes.put('/:id', contacts.updateContact);
+routes.delete('/:id', contacts.deleteContact);
+
+app.use(bodyParser.json());
 module.exports = routes;

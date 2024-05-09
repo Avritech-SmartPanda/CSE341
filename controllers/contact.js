@@ -1,18 +1,17 @@
 const db = require('../models');
 const Contact = db.contacts;
+const ObjectId = require('mongodb').ObjectId;
 
 
-
-const createContact = (req, res) => {
+const createContact = async (req, res) => {
   // Validate request
-  if (!req.body.contact_id || !req.body.firstName || !req.body.lastName || !req.body.email || !req.body.favoriteColor || !req.body.birthday) {
+  if (!req.body.firstName || !req.body.lastName || !req.body.email || !req.body.favoriteColor || !req.body.birthday) {
     res.status(400).send({ message: 'All fields are required!' });
     return;
   }
 
   // Create a Contact
   const contact = new Contact({
-    contact_id: req.body.contact_id,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
@@ -36,13 +35,12 @@ const getContacts = (req, res) => {
   Contact.find(
     {},
     {
-      contact_id: 1,
       firstName: 1,
       lastName: 1,
       email: 1,
       favoriteColor: 1,
       birthday: 1,
-      _id: 0,
+      _id: 1,
     }
   )
     .then((data) => {
@@ -59,7 +57,7 @@ const getContacts = (req, res) => {
 
 // Find a single Contact with an id
 const getContact = (req, res) => {
-  const contact_id = req.params.contact_id;
+  const contact_id = req.params.id;
 
   Contact.find({ contact_id: contact_id })
     .then((data) => {
@@ -77,31 +75,30 @@ const getContact = (req, res) => {
 
 };
 
-// Update a Contact by the id in the request
-const updateContact = (req, res) => {
-  const contact_id = req.params.contact_id;
+// Update trhe whole  contact by the id in the request
+const updateContact = async (req, res) => {
+  const contact_id = new ObjectId(req.params.id);
+  const contact = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    favoriteColor: req.body.favoriteColor,
+    birthday: req.body.birthday
+  };
 
-  Contact.findOneAndUpdate({ contact_id: contact_id }, req.body, {
-    useFindAndModify: false,
-  })
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Cannot update Contact with contact_id=${contact_id}. Maybe Contact was not found!`,
-        });
-      } else res.status(200).send({ message: 'Contact was updated successfully.' });
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: 'Error updating Contact with contact_id=' + contact_id,
-      });
-    });
+
+  const response = await Contact.replaceOne({ id: contact_id }, contact);
+  if (response.modifiedCount > 0) {
+    res.status(200).send(response);
+  } else {
+    res.status(500).json(response.err || { message: 'Error updating contact with id ' + contact_id });
+  }
 };
 
 
 // Delete a Contact with the specified id in the request
 const deleteContact = (req, res) => {
-  const id = req.params.id;
+  const id = new ObjectId(req.params.id);
 
   Contact.findByIdAndRemove(id)
     .then((data) => {
@@ -122,28 +119,13 @@ const deleteContact = (req, res) => {
     });
 };
 
-// Delete all contacts from the database.
-const deleteContacts = (req, res) => {
-  Contact.deleteMany({})
-    .then((data) => {
-      res.send({
-        message: `${data.deletedCount} contacts were deleted successfully!`,
-      });
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while removing all contact.',
-      });
-    });
-};
+
 
 module.exports = {
   createContact,
   getContacts,
   getContact,
   updateContact,
-  deleteContacts,
   deleteContact
 }
 
